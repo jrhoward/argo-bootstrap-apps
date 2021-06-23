@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: helm-chartmuseum
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: helm
+  project: argo-master
+  source:
+    repoURL: https://chartmuseum.github.io/charts
+    chart: chartmuseum
+    targetRevision: "3.1.*"
+    helm:
+      releaseName: cluster
+      version: v3
+      values: |
+        persistence:
+          enabled: true
+        env:
+          open:
+            DISABLE_API: false
+        ingress:
+          enabled: true
+          hosts:
+            - name: helm.public.k8s.local
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

@@ -1,0 +1,12 @@
+# Default values for argocd-apps.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+
+nameOverride: ""
+fullnameOverride: ""
+
+metricsServer:
+  enabled: false
+minioOperator:
+  enabled: false

@@ -1,0 +1,27 @@
+{{- if .Values.metricsServer.enabled }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: metrics-server
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  project: argo-master
+  source:
+    repoURL: https://charts.bitnami.com/bitnami
+    chart: metrics-server
+    targetRevision: 5.8.*
+    helm:
+      releaseName: cluster
+      version: v3
+      #values: |
+      #  rbac:
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+{{- end }}

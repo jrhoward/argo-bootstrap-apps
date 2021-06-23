@@ -1,0 +1,34 @@
+
+{{- if .Values.minioOperator.enabled }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: minio-operator
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: minio-operator
+  project: argo-master
+  source:
+    repoURL: https://operator.min.io/
+    chart: minio-operator
+    targetRevision: 4.1.*
+    helm:
+      releaseName: cluster
+      version: v3
+      #values: |
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+  ignoreDifferences:
+  - group: minio.min.io
+    kind: CustomResourceDefinition
+    jsonPointers:
+    - /spec
+{{- end }}

@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cert-manager
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cert-manager
+  project: argo-master
+  source:
+    repoURL: https://charts.jetstack.io
+    chart: cert-manager
+    targetRevision: "1.4.*"
+    helm:
+      releaseName: cluster
+      version: v3
+      values: |
+{{ .Files.Get "files/cert-manager.yaml" | indent 8 }}
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: velero
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: velero
+  project: argo-master
+  source:
+    repoURL: https://vmware-tanzu.github.io/helm-charts
+    chart: velero
+    targetRevision: "2.*"
+    helm:
+      releaseName: cluster
+      version: v3
+      values: |
+{{ .Files.Get "files/velero.yaml" | indent 8 }}
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

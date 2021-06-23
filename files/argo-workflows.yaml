@@ -1,0 +1,52 @@
+singleNamespace: true
+useDefaultArtifactRepo: true
+artifactRepository:
+  archiveLogs: true
+  s3:
+    accessKeySecret:
+      key: accesskey
+      name: minio
+    secretKeySecret:
+      key: secretkey
+      name: minio
+    bucket: argo-workflows
+    endpoint: minio.argo-workflows.svc:9000
+    insecure: true
+init:
+  serviceAccount: argo-init
+controller:
+  containerRuntimeExecutor: pns
+  workflowDefaults:
+     spec:
+       ttlStrategy:
+         secondsAfterCompletion: 84600
+     workflowWorkers: 12
+     podWorkers: 12
+workflow:
+  serviceAccount:
+    create: true
+  rbac:
+    create: true
+server:
+  baseHref: "/"
+  secure: false
+  extraArgs: []
+  ingress:
+    enabled: true
+    annotations:
+      - ingress.kubernetes.io/protocol: http
+    # labels: {}
+    # ingressClassName: ""
+    hosts:
+      - argoworkflow.public.k8s.local
+executor:
+  image:
+    registry: quay.io
+    repository: argoproj/argoexec
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: ""
+  resources: {}
+  # Adds environment variables for the executor.
+  env: {}
+  # sets security context for the executor container
+  securityContext: {}

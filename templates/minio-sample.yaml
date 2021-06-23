@@ -1,0 +1,2 @@
+#kubectl apply -n velero https://raw.githubusercontent.com/vmware-tanzu/velero/main/examples/minio/00-minio-deployment.yaml
+#kubectl apply -n argo-worflows https://raw.githubusercontent.com/vmware-tanzu/velero/main/examples/minio/00-minio-deployment.yaml

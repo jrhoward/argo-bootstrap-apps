@@ -6,7 +6,18 @@
 nameOverride: ""
 fullnameOverride: ""
 
+
+argoWorkflows:
+  enabled: false
+certManager:
+  enabled: false
+externalSecrets:
+  enabled: false
+kubeStateMetrics:
+  enabled: false
 metricsServer:
   enabled: false
 minioOperator:
+  enabled: false
+velero:
   enabled: false
